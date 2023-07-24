@@ -1,6 +1,8 @@
 # Sustainable Workflow for Shigella flexneri RNA analysis
 Final project for the course Applied Sequence Analysis 2023
+
 Inga Tummoszeit and Georg von Arnim
+
 24/07/2023
 
 ------------
@@ -19,4 +21,18 @@ Each of the optional steps can be set to True or False to indicate whether the p
 ### Parameters
 For most steps in the pipeline it is possible to adjust the parameters to specific needs. If this is possible for a tool, they can be added and changed in the config file under the tool's name. This includes software tools like Trim Galore where different adpater sequences for trimming can be specified, SortmeRNA, featureCount, samtools conensus and quast. Also for de novo-guided reference mapping different parameters can be changed.
 
+------------
+## Results
+The results of this pipeline can be found under the result directory after running the pipeline. 
 
+In the following, the location of the output files is shown:
+  - All quality controls:
+                  -results/quality/raw/multiqc\_report.html: Report of raw RNA-seq                                                 -results/quality/trimming/multiqc\_report.html: Report of RNA reads trimmed with TrimGalore
+                  -results/kraken2/multiqc\_report.html: Krakenreport
+                  -results/quality/raw\_wgs/multiqc\_report.html: Report of raw wgs reads
+                  -results/quality/trim\_wgs/multiqc\_report.html: Report of wgs reads trimmed with TrimGalore
+                  -results/quality/decon\_wgs/multiqc\_report.html: Report of decontaminated wgs
+    - Differential gene expression:
+                  -results/diffexpression: folder containing all files created by differential gene expression analysis, including the results_diffexpression text-file.
+    - Phylogenetic tree:
+                  -results/tree/tree.pdf
