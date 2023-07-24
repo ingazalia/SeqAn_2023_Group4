@@ -1,0 +1,29 @@
+configfile: "config/config.yaml"
+import pandas as pd
+
+samples = pd.read_csv(config["samples"], index_col="sample", sep='\t',dtype={'sample': str})
+
+sample = [s for s in list(samples.index)]#samples.index.values
+
+
+include: "rules/qc.smk"
+include: "rules/reference_readMapping.smk"
+include: "rules/decontaminate.smk"
+include: "rules/gene_quantification.smk"
+include: "rules/DeNovo.smk"
+include: "rules/Alignment.smk"
+include: "rules/DGE.smk"
+include: "rules/phylo_tree.smk"
+
+rule all:
+    input:
+        "results/tree/tree.pdf" if not config["Decontamination"]["krakenreport"] else [],
+        "results/diffexpression/results_diffexpression.txt" if not config["Decontamination"]["krakenreport"] else [],
+        "results/kraken2/multiqc_report.html" if config["Decontamination"]["krakenreport"] else [],
+        "results/quality/raw/multiqc_report.html" if (not config["Decontamination"]["krakenreport"] and config["ref_genome_present"]) else [],
+        "results/quality/trimming/multiqc_report.html" if (not config["Decontamination"]["krakenreport"] and config["ref_genome_present"]) else [],
+        "results/quality/raw_wgs/multiqc_report.html" if (not config["Decontamination"]["krakenreport"] and not config["ref_genome_present"]) else [],
+        "results/quality/trim_wgs/multiqc_report.html"if (not config["Decontamination"]["krakenreport"] and not config["ref_genome_present"]) else [],
+        "results/quality/decon_wgs/multiqc_report.html" if (not config["Decontamination"]["krakenreport"] and not config["ref_genome_present"] and config["Decontamination"]["decontaminate"]) else []
+
+
