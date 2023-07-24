@@ -1,0 +1,115 @@
+samples: "config/samples.tsv" #"config/samples_small.tsv"
+samples_sheet: "config/samples_sheet_2M.tsv"
+
+#Preprocessing: reference databases for SortMeRNA
+SortMeRNA:
+  rRNA_REF_1: "resources/rRNA_ref/CP045522.1_945404..948335_rRNA.1.fasta"
+  rRNA_REF_2: "resources/rRNA_ref/NR_076170.1_Shigellaflexneri2astrain30123SribosomalRNAgenecompletesequence.fasta"
+  rRNA_REF_3: "resources/rRNA_ref/UDWU01000034.1_224..3203_rRNA.1.fasta"
+
+
+#specify if there is a reference genome present or not (-> ref based mapping or de novo assembly)
+ref_genome_present: False
+
+#if ref_genome_present == True, add resources here
+ref_FASTA: "resources/REF/shigella_flexneri.fasta"
+ref_GFF: "resources/REF/shigella_flexneri.gff"
+
+#If ref_genome == False: add path to wgs files containing reads for genome reassembly
+wgsReads: #"config/wgs.tsv"
+  wgs1: "resources/ASSEMBLY/SRR13282500_Other_Sequencing_of_Shigella_flexneri_2a_1.fastq.gz"
+  wgs2: "resources/ASSEMBLY/SRR13282500_Other_Sequencing_of_Shigella_flexneri_2a_2.fastq.gz"
+
+Decontamination:
+  krakenreport: False #set to True so that only Kraken2 report is created for wgs reads
+  decontaminate: True #set to True if wgs reads shall be decontaminated based on contaminationgenome
+  krakendatabase: "resources/Krakendb" #Path to folder containing Krakendatabase
+  contaminationgenome: "resources/decon_genomes/M-hominis"
+
+
+#For phylogenetic tree creation
+threshold_N: 0.05 # how many n's can be in a fasta file? please provide percent in decimal (i.e. 0.05)
+
+
+
+
+
+
+# PARAMETERS FOR DIFFERENT TOOLS
+trimgalore: "--illumina -q 20 -e 0.1 --length 20 --stringency 1 --gzip" #parameter used in wrapper
+trimgalore_wgs: "--illumina -q 20 -e 0.1 --length 20 --stringency 1 --gzip" #etc., parameter used in wrapper
+
+sortmeRNA: #parameters for sequence alignments for their matching rRNA reads in the SAM or BLAST-like formats.
+  numAlign: 1 # 1= very fast, 0= very slow, Higher INT signifies more alignments will be made & output  If Int = 0, all alignments will be output
+  other: "" #e.g. -min-lis, -gap_open etc "https://sortmerna.readthedocs.io/en/latest/manual4.0.html#choosing-parameters-for-filtering-and-read-mapping"
+
+
+hisat2: "" # params for hisat e.g. -5 (Trim bases from 5'), -3, --phred33
+          #(Input qualities are ASCII chars equal to the Phred quality plus 33),
+          # --mp MX,MN (Sets the maximum (MX) and minimum (MN) mismatch penalties)
+
+featureCount:
+  Min_fragment: 50 # Minimum fragment/template length, 50 by default
+  Max_fragment: 600 # Maximum fragment/template length, 600 by default.
+  Min_map_score: 0 # Minimum mapping quality score a read must satisfy, 0 by default
+  FracOverlap: 0 # Minimum fraction overlapping bases in a reads that required for read assigment, float between 0 and 1, default 0
+  FracOverFeature: 0 # Minimum fraction of bases included in a feature that is required to overlap with a read. Value within range [0,1]. 0 by default.
+  MaxMOp: 10 # Specify the maximum number of ‘M’ operations (matches or mis-matches) allowed in a CIGAR string, default 10
+  MinOverlap: 1 # Minimum number of overlapping bases in a read that is required for read assignment. 1 by default.
+  ReadExtension3: 0 # Reads are extended downstream by < int > bases from their 3’ end. 0 by default.
+  ReadExtension5: 0 # Reads are extended upstream by < int > bases from their 5’ end. 0 by default
+  other: "" # e.g. -B (only fragments that have both ends successfully aligned), -C (chimeric fragments),
+            # -f (read summarization at feature level, otherwise on meta-feature level), -j (# reads supporting exon-exon junction)
+            # --byReadGroup (Count reads by read group), --ignoreDup (reads marked as duplicates will be ignored)
+            # see: https://subread.sourceforge.net/featureCounts.html (Subread/Rsubread Users Guide)
+
+
+megahit: #"--min-count 2 --k-min 21 --k-max 99 --k-step 20 --min-contig-len 200" #parameters for megahit, given ones are default values
+    min-count: 2 #mincount = minimum multiplicity for filtering (k_min+1)-mers, default 2
+    kmin: 21 #kmin = minimum kmer size (<= 127), must be odd number, default 21
+    kmax: 99 #kmax = maximum kmer size (<= 127), must be odd number, default 99
+    kstep: 20 #kstep = increment of kmer size of each iteration (<= 28), must be even number, default 20
+    mincontiglength: 200 #minimum length of contigs to output
+    other: ""   #more individual parameters can be added e.g. visit https://www.metagenomics.wiki/tools/assembly/megahit
+
+prokka:
+  mincontig: 1 # Minimum contig size [NCBI needs 200] (default '1')
+  evalue: 1e-06 #Similarity e-value cut-off (default '1e-06')
+  other: "" #e.g. --norrna, --notrna, --rawproduct "https://github.com/tseemann/prokka"
+
+mafft:
+  weight: 2.7 # Weighting factor (valid of --globalpair, --localpair, --genafpair, --fastapair or --blastpair), default 2.7
+  tree: 2 # Guide tree, valid with 6mer distance, default 2
+  maxiterate: 0 # number cycles, default 0
+  other: "" #e.g. --6merpair (Distance based of shared 6mers, default on), --localpair, --genafpair, --fastapair
+            # https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAI
+
+
+bwa-mem: #additional parameters for bwa-mem
+    B: 4 #set mismatch penalty
+    k: 19 #minimum seed length
+    w: 100 #band width for banded alignment [100]
+    d: 100 #off-diagonal X-dropoff [100]
+    r: 1.5 #look for internal seeds inside a seed longer than {-k} * FLOAT [1.5]
+    y: 20 #seed occurrence for the 3rd round seeding [20]
+    c: 500 #skip seeds with more than INT occurrences [500]
+    D: 0.5 #drop chains shorter than FLOAT fraction of the longest overlapping chain [0.50]
+    W: 0 #discard a chain if seeded bases shorter than INT [0]
+    m: 50 #perform at most INT rounds of mate rescues for each read [50]
+    other: "" #other parameters can be added, e.g. visit https://bio-bwa.sourceforge.net/bwa.shtml
+
+
+quast:
+    min_contig: 500 #Lower threshold for contig length
+    minalignmentlength: 65 #The minimum alignment length
+    other: "" #add additional parameters, e.g. based on https://quast.sourceforge.net/docs/manual.html
+
+
+consensus:
+  depth: 1 # please don't change
+  mode: "bayesian" # Select the consensus algorithm. "simple" frequency counting and the "bayesian" (Gap5) methods, with Bayesian being the default.
+  min_MQ: 0 #Filters out reads with a mapping quality below INT. This defaults to zero.
+  min_BQ: 0 #Filters out bases with a base quality below INT. This defaults to zero.
+  other: "" #e.g.--ambig, -q etc. http://www.htslib.org/doc/samtools-consensus.html
+
+getfasta: "" # e.g. -tab, -fullHeader
