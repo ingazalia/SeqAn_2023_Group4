@@ -27,12 +27,14 @@ The results of this pipeline can be found under the result directory after runni
 
 In the following, the location of the output files is shown:
   - All quality controls:
-                  -results/quality/raw/multiqc\_report.html: Report of raw RNA-seq                                                 -results/quality/trimming/multiqc\_report.html: Report of RNA reads trimmed with TrimGalore
-                  -results/kraken2/multiqc\_report.html: Krakenreport
-                  -results/quality/raw\_wgs/multiqc\_report.html: Report of raw wgs reads
-                  -results/quality/trim\_wgs/multiqc\_report.html: Report of wgs reads trimmed with TrimGalore
-                  -results/quality/decon\_wgs/multiqc\_report.html: Report of decontaminated wgs
+                  - results/quality/raw/multiqc\_report.html: Report of raw RNA-seq                                                 - results/quality/trimming/multiqc\_report.html: Report of RNA reads trimmed with TrimGalore
+                  - results/kraken2/multiqc\_report.html: Krakenreport
+                  - results/quality/raw\_wgs/multiqc\_report.html: Report of raw wgs reads
+                  - results/quality/trim\_wgs/multiqc\_report.html: Report of wgs reads trimmed with TrimGalore
+                  - results/quality/decon\_wgs/multiqc\_report.html: Report of decontaminated wgs
+    
     - Differential gene expression:
-                  -results/diffexpression: folder containing all files created by differential gene expression analysis, including the results_diffexpression text-file.
+                  - results/diffexpression: folder containing all files created by differential gene expression analysis, including the results_diffexpression text-file.
+      
     - Phylogenetic tree:
                   -results/tree/tree.pdf
