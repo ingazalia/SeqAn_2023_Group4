@@ -28,10 +28,10 @@ rule trimgalore:
         fastq1 = lambda wildcards: samples.at[wildcards.sample, 'fq1'],
         fastq2 = lambda wildcards: samples.at[wildcards.sample, 'fq2']
     output:
-        temp("results/trimmed/{sample}_R1_val_1.fq.gz"),
-        temp("results/trimmed/{sample}_R2_val_2.fq.gz"),
-        temp("results/trimmed/{sample}_R1.fastq.gz_trimming_report.txt"),
-        temp("results/trimmed/{sample}_R2.fastq.gz_trimming_report.txt")
+        "results/trimmed/{sample}_R1_val_1.fq.gz",
+        "results/trimmed/{sample}_R2_val_2.fq.gz",
+        "results/trimmed/{sample}_R1.fastq.gz_trimming_report.txt",
+        "results/trimmed/{sample}_R2.fastq.gz_trimming_report.txt"
     params:
         extra=config["trimgalore"]
     log:
@@ -74,10 +74,10 @@ rule sortmerna:
         ref_rRNA_2=config["SortMeRNA"]["rRNA_REF_2"],
         ref_rRNA_3=config["SortMeRNA"]["rRNA_REF_3"]
     output:
-        nonrRNA_1=temp("results/sortmerna/{sample}_fwd.fq.gz"),
-        nonrRNA_2=temp("results/sortmerna/{sample}_rev.fq.gz"),
-        rRNA_1=temp("results/sortmerna/aligned/{sample}_fwd.fq.gz"),
-        rRNA_2=temp("results/sortmerna/aligned/{sample}_rev.fq.gz")
+        nonrRNA_1="results/sortmerna/{sample}_fwd.fq.gz",
+        nonrRNA_2="results/sortmerna/{sample}_rev.fq.gz",
+        rRNA_1="results/sortmerna/aligned/{sample}_fwd.fq.gz",
+        rRNA_2="results/sortmerna/aligned/{sample}_rev.fq.gz"
     log:
         "results/logs/sortmerna/{sample}.log"
     params:

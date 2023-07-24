@@ -30,8 +30,8 @@ rule rename_files:
         config["wgsReads"]["wgs1"],
         config["wgsReads"]["wgs2"]
     output:
-        temp("results/trimgalore_wgs/wgs1.fastq.gz"),
-        temp("results/trimgalore_wgs/wgs2.fastq.gz")
+        "results/trimgalore_wgs/wgs1.fastq.gz",
+        "results/trimgalore_wgs/wgs2.fastq.gz"
     shell:
         """
         mkdir -p results/trimgalore_wgs  # Create the directory if it doesn't exist
@@ -44,10 +44,10 @@ rule wgs_trimming:
         "results/trimgalore_wgs/wgs1.fastq.gz",
         "results/trimgalore_wgs/wgs2.fastq.gz"
     output:
-        temp("results/trimgalore_wgs/wgs1_val_1.fq.gz"),
-        temp("results/trimgalore_wgs/wgs2_val_2.fq.gz"),
-        temp("results/trimgalore_wgs/wgs1.fastq.gz_trimming_report.txt"),
-        temp("results/trimgalore_wgs/wgs2.fastq.gz_trimming_report.txt")
+        "results/trimgalore_wgs/wgs1_val_1.fq.gz",
+        "results/trimgalore_wgs/wgs2_val_2.fq.gz",
+        "results/trimgalore_wgs/wgs1.fastq.gz_trimming_report.txt",
+        "results/trimgalore_wgs/wgs2.fastq.gz_trimming_report.txt"
     log:
         "results/logs/WGS_deNovo/trimgalore.log"
     threads: 4
@@ -206,8 +206,8 @@ rule sortbam_denovo:
     input:
         "results/hisat_denovo/{sample}.bam"
     output:
-        bam=temp("results/bam_sorted_denovo/{sample}.bam"),
-        bai=temp("results/bam_sorted_denovo/{sample}.bam.bai")
+        bam="results/bam_sorted_denovo/{sample}.bam",
+        bai="results/bam_sorted_denovo/{sample}.bam.bai"
     log:
         sort="results/logs/sortbam_denovo/{sample}.log",
         index="results/logs/indexbam_denovo/{sample}.log"

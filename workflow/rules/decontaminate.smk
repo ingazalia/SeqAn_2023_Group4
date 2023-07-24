@@ -47,7 +47,7 @@ rule decontaminate_map:
         trim1 = "results/trimgalore_wgs/wgs1_val_1.fq.gz",
         trim2 = "results/trimgalore_wgs/wgs2_val_2.fq.gz",
     output:
-        temp("results/decon_mapped/genomeseq.sam")
+        "results/decon_mapped/genomeseq.sam"
     conda:
         "../envs/env.yaml"
     params:
